@@ -27,7 +27,6 @@ const start = () => {
         'View all employees',
         'View all employees by department',
         'View all employees by role',
-        'View all employees by manager',
         'Add employee',
         'Add department',
         'Add role',
@@ -49,10 +48,6 @@ const start = () => {
 
         case 'View all employees by role':
           roleSearch();
-          break;
-
-        case 'View all employees by manager':
-          managerSearch();
           break;
 
         case 'Add employee':
@@ -96,7 +91,8 @@ const employeeSearch = () => {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.table('All Employees', res);
-    connection.end();
+    // connection.end();
+    start();
   });
 
 };
@@ -107,7 +103,8 @@ const departmentSearch = () => {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.table('All Departments', res);
-    connection.end();
+    // connection.end();
+    start();
   });
 
 };
@@ -116,12 +113,14 @@ const departmentSearch = () => {
 
 ////////========================= 3. "View  all roles"
 const roleSearch = () => {
-  connection.query('SELECT * FROM emprole', (err, res) => {
+  connection.query('SELECT * FROM role', (err, res) => {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.table('All Roles', res);
-    roleSearch();
-    connection.end();
+    // roleSearch();
+    // connection.end();
+    start();
+
   });
 
 };
@@ -134,7 +133,7 @@ const roleSearch = () => {
 
 //////////========================= 5. "Add employee" 
 const addEmployee = () => {
-  connection.query('SELECT * FROM emprole', function (err, res) {
+  connection.query('SELECT * FROM role', function (err, res) {
     if (err) throw err;
     inquirer
       .prompt([{
@@ -219,7 +218,7 @@ const addDepartment = () => {
 
 
 const addRole = () => {
-  connection.query('SELECT * FROM emprole', function (err, res) {
+  connection.query('SELECT * FROM role', function (err, res) {
     if (err) throw err;
     inquirer
       .prompt([
@@ -231,13 +230,20 @@ const addRole = () => {
         {
           name: 'salary',
           type: 'input',
-          message: "What salary would you like for this role? ",
+          message: 'What is the salary you would like to add to this role?',
         },
+        {
+          name: 'department_id',
+          type: 'input',
+          message: 'What is the department id for this role?',
+        },
+
       ]).then(function (answer) {
         connection.query(
-          'INSERT INTO emprole SET ?', {
+          'INSERT INTO role SET ?', {
             title: answer.title,
             salary: answer.salary,
+            department_id: answer.department_id,
           },
           function (err) {
             if (err) throw err;
@@ -249,6 +255,10 @@ const addRole = () => {
 };
 
 //////////========================= 8. "Update Employee Roles" 
+
+
+
+
 
 
 //////////========================= 9. "Remove employee"  
