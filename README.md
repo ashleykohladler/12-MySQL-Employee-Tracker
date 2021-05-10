@@ -2,7 +2,7 @@
 
 # Description
 
-An application that allows a manager to track and organize employees. The manager may look up, add, update, or delete an employee. Also the manager can look up or add a department.
+This command line project uses MYSQL, Node and Inquirer to help manage a company's employees. It lets them view and add each employee, department and role in order to better organize their busineess.
 
 # Table of Contents
 
@@ -40,6 +40,8 @@ ashleykohladler
 
 ### Link to GitHub:
 
+https://github.com/ashleykohladler/12-MySQL-Employee-Tracker
+
 ### Email address
 
 ashleykohladler@gmail.com
@@ -48,7 +50,11 @@ ashleykohladler@gmail.com
 
 ## Using application from the command line
 
-![Demo of README]()
+![Demo of README](assets/demo.gif)
+
+## Link to Demo
+
+https://drive.google.com/file/d/11FQ7qIDsTLnul7rXyueCbPw8Ihzn2Tt6/view
 
 # Badges
 
