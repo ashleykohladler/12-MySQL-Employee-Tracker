@@ -33,7 +33,7 @@ const start = () => {
         'Remove employee',
         'Update employee role',
         'Update employee manager',
-        'exit',
+        'Exit',
       ],
     })
     .then((answer) => {
@@ -86,15 +86,14 @@ const start = () => {
 };
 
 //////////========================= 1. "View Employees"
+
 const employeeSearch = () => {
-  connection.query('SELECT * FROM employee', (err, res) => {
+  connection.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary FROM employee, role, department WHERE department.id = role.department_id AND role.id = employee.role_id ORDER BY employee.id ASC', (err, res) => {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.table('All Employees', res);
-    // connection.end();
     start();
   });
-
 };
 
 //////////========================= 2. "View  all departments"
@@ -125,13 +124,7 @@ const roleSearch = () => {
 
 };
 
-//////////========================= 4. "View  all employees by manager"
-
-
-
-
-
-//////////========================= 5. "Add employee" 
+//////////========================= 4. "Add employee" 
 const addEmployee = () => {
   connection.query('SELECT * FROM role', function (err, res) {
     if (err) throw err;
@@ -188,7 +181,7 @@ const addEmployee = () => {
 };
 
 
-//////////========================= 6. "Add Department" 
+//////////========================= 5. "Add Department" 
 
 const addDepartment = () => {
   connection.query('SELECT * FROM department', function (err, res) {
@@ -214,54 +207,61 @@ const addDepartment = () => {
 
 
 
-//////////========================= 7. "Add Roles" 
+//////////========================= 6. "Add Roles" 
 
 
 const addRole = () => {
   connection.query('SELECT * FROM role', function (err, res) {
-    if (err) throw err;
-    inquirer
-      .prompt([
-        {
-          name: 'title',
-          type: 'input',
-          message: "What Employee title would you like to add? ",
-        },
-        {
-          name: 'salary',
-          type: 'input',
-          message: 'What is the salary you would like to add to this role?',
-        },
-        {
-          name: 'department_id',
-          type: 'input',
-          message: 'What is the department id for this role?',
-        },
-
-      ]).then(function (answer) {
-        connection.query(
-          'INSERT INTO role SET ?', {
-            title: answer.title,
-            salary: answer.salary,
-            department_id: answer.department_id,
-          },
-          function (err) {
-            if (err) throw err;
-            console.log('Your new title has been added!');
-            start();
-          })
+    connection.query('SELECT * FROM department', function (err, response_dept) {
+      //this is equivalent to response_dept[i], i++, i< response_dept.length
+      let departments = response_dept.map((dept) => {
+        return {
+          name: dept.name,
+          value: dept.id
+        }
       })
+      if (err) throw err;
+      inquirer
+        .prompt([{
+            name: 'title',
+            type: 'input',
+            message: "What Employee title would you like to add? ",
+          },
+          {
+            name: 'salary',
+            type: 'input',
+            message: "What salary would you like for this role? ",
+          },
+          {
+            name: 'department_id',
+            type: 'list',
+            choices: departments,
+            message: "What is the department for this role? ",
+          },
+        ]).then(function (answer) {
+          connection.query(
+            'INSERT INTO role SET ?', {
+              title: answer.title,
+              salary: answer.salary,
+              department_id: answer.department_id,
+            },
+            function (err) {
+              if (err) throw err;
+              console.log('Your new title has been added!');
+              start();
+            })
+        })
+    })
   })
 };
 
-//////////========================= 8. "Update Employee Roles" 
 
 
 
+//////////========================= 7. "Update Employee Roles" 
 
 
-
-//////////========================= 9. "Remove employee"  
+//////////========================= 8. "Remove employee"  
 // const removeEmployee = () => {
 //   console.log('Deleting employee...\n');
 //   connection.query(
